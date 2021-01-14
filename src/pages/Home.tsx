@@ -8,6 +8,7 @@ import {
   MenuItem,
   Button,
 } from "@material-ui/core";
+import axios from "axios";
 import {
   Formik,
   FormikHelpers,
@@ -57,6 +58,9 @@ const useStyles = makeStyles(() =>
         backgroundColor: "#601BA1",
       },
     },
+    formLabel: {
+      marginBottom: "1em",
+    },
   })
 );
 
@@ -86,13 +90,27 @@ export const Home: React.FC = ({}) => {
       <Formik
         initialValues={initialValues}
         onSubmit={(values, actions) => {
+          const getData = async () => {
+            try {
+              const response = await axios.get(
+                `https://opentdb.com/api.php?amount=10&category=${values.category}&difficulty=${values.difficulty}&type=${values.type}`
+              );
+              console.log(response);
+              return response;
+            } catch (error) {
+              throw error;
+            }
+          };
           console.log({ values, actions });
           actions.setSubmitting(false);
+          getData();
         }}
       >
         <Form className={classes.form}>
           <div className={classes.formDiv}>
-            <InputLabel htmlFor="category">Category</InputLabel>
+            <InputLabel htmlFor="category" className={classes.formLabel}>
+              Category
+            </InputLabel>
             <Field as={Select} name="category" className={classes.itemField}>
               <MenuItem value="any">Any Category</MenuItem>
               <MenuItem value={9}>General Knowledge</MenuItem>
@@ -126,7 +144,9 @@ export const Home: React.FC = ({}) => {
             </Field>
           </div>
           <div className={classes.formDiv}>
-            <InputLabel htmlFor="difficulty">Difficulty</InputLabel>
+            <InputLabel htmlFor="difficulty" className={classes.formLabel}>
+              Difficulty
+            </InputLabel>
             <Field as={Select} name="difficulty" className={classes.itemField}>
               <MenuItem value="any">Any Difficulty</MenuItem>
               <MenuItem value="easy">Easy</MenuItem>
@@ -135,7 +155,9 @@ export const Home: React.FC = ({}) => {
             </Field>
           </div>
           <div className={classes.formDiv}>
-            <InputLabel htmlFor="Type">Type</InputLabel>
+            <InputLabel htmlFor="Type" className={classes.formLabel}>
+              Type
+            </InputLabel>
             <Field as={Select} name="type" className={classes.itemField}>
               <MenuItem value="any">Any Type</MenuItem>
               <MenuItem value="multiple">Multiple Choice</MenuItem>
