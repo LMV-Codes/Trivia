@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { Formik, FormikHelpers, FormikProps, Form, Field } from "formik";
 
 interface QuestionRandomizerProps {
   incorrectAnswers: Array<string>;
@@ -23,9 +24,15 @@ export const QuestionRandomizer: React.FC<QuestionRandomizerProps> = ({
   return (
     <div>
       {combineAndRandomizeAnswers(incorrectAnswers, correctAnswer).map(
-        (answers) => answers
+        (answer, index) => (
+          <div role="group" aria-labelledby="radioGroup" key={index}>
+            <label>
+              <Field type="radio" value={answer} name="playerAnswer" />
+              {answer}
+            </label>
+          </div>
+        )
       )}
-      ;
     </div>
   );
 };

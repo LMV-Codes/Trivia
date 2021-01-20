@@ -95,15 +95,27 @@ interface TriviaData {
 }
 
 export const Home: React.FC = ({}) => {
+  const classes = useStyles();
   const [dataRecieved, setDataRecieved] = useState<boolean>(false);
   const [data, setData] = useState<TriviaData[]>([]);
+  const [answerChecked, setAnswerChecked] = useState(false);
+
   const initialValues: PostForm = {
     numberOfQuestions: "amount=10",
     category: "",
     difficulty: "",
     type: "",
   };
-  const classes = useStyles();
+  const initialValuesQuestions = {
+    playerAnswer: "",
+  };
+  const checkAnswer = (correctAnswer: string, playerAnswer: string) => {
+    if (correctAnswer === playerAnswer) {
+      return setAnswerChecked(true);
+    } else {
+      return setAnswerChecked(false);
+    }
+  };
   return (
     <Container className={classes.mainContainer}>
       {dataRecieved === false ? (
@@ -132,7 +144,6 @@ export const Home: React.FC = ({}) => {
                     `https://opentdb.com/api.php?${values.numberOfQuestions}&category=${values.category}${values.difficulty}${values.type}`
                   );
                   setData(response.data.results);
-                  console.log(response.data.results);
                   setDataRecieved(true);
                 } catch (error) {
                   throw error;
@@ -264,17 +275,29 @@ export const Home: React.FC = ({}) => {
           </Formik>
         </div>
       ) : (
-        data.map((data, index) => (
-          <div key={index}>
-            <Typography variant="overline" align="center">
-              {data.question}
-            </Typography>
-            <QuestionRandomizer
-              incorrectAnswers={data.incorrect_answers}
-              correctAnswer={data.correct_answer}
-            />
-          </div>
-        ))
+        <Formik
+          initialValues={initialValuesQuestions}
+          onSubmit={(values, actions) => {
+            console.log({ values });
+            actions.setSubmitting(false);
+          }}
+        >
+          <Form>
+            {data.map((data, index) => (
+              <div key={index}>
+                <Typography variant="body2" align="center">
+                  {data.question}
+                </Typography>
+
+                <QuestionRandomizer
+                  incorrectAnswers={data.incorrect_answers}
+                  correctAnswer={data.correct_answer}
+                />
+              </div>
+            ))}
+            <Button type="submit">Submit</Button>
+          </Form>
+        </Formik>
       )}
     </Container>
   );
