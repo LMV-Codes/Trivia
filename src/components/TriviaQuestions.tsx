@@ -84,7 +84,7 @@ export const TriviaQuestions: React.FC<TriviaQuestionsProps> = ({
       <Form className={classes.triviaForm}>
         {triviaData.map((data, indexQuestion) => (
           <div key={indexQuestion}>
-            <Typography variant="overline">{data.question}</Typography>
+            <Typography variant="overline">{atob(data.question)}</Typography>
             <Grid
               container
               direction="row"
@@ -111,7 +111,7 @@ export const TriviaQuestions: React.FC<TriviaQuestionsProps> = ({
                         name={`questions.${indexQuestion}`}
                         key={indexAnswer}
                       />
-                      {answer}
+                      {atob(answer)}
                     </Grid>
                   </Typography>
                 </div>

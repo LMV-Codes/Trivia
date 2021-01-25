@@ -84,7 +84,7 @@ export const TriviaParameterChoice: React.FC<TriviaParameterChoiceProps> = ({
         const getData = async () => {
           try {
             const response = await axios.get(
-              `https://opentdb.com/api.php?${values.numberOfQuestions}&category=${values.category}${values.difficulty}${values.type}`
+              `https://opentdb.com/api.php?${values.numberOfQuestions}&category=${values.category}${values.difficulty}${values.type}&encode=base64`
             );
             setTriviaData(response.data.results);
             console.log(response.data.results);
