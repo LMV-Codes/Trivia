@@ -5,9 +5,7 @@ import {
   Typography,
   Button,
 } from "@material-ui/core";
-import { Formik, Form, Field, FieldProps } from "formik";
 import React, { useState } from "react";
-import { QuestionRandomizer } from "../components/QuestionRandomizer";
 import { TriviaParameterChoice } from "../components/TriviaParameterChoice";
 import { TriviaQuestions } from "../components/TriviaQuestions";
 

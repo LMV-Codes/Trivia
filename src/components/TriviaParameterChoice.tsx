@@ -1,12 +1,6 @@
 import React from "react";
 import axios from "axios";
 import { Formik, Form, Field } from "formik";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUserGraduate,
-  faUser,
-  faUserAstronaut,
-} from "@fortawesome/free-solid-svg-icons";
 import {
   Button,
   createStyles,
@@ -43,11 +37,12 @@ const useStyles = makeStyles(() =>
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
-      alignItems: "stretch",
-
+      alignItems: "center",
+      alignSelf: "center",
       margin: "1em",
     },
     submitButton: {
+      marginTop: "1em",
       width: "15em",
       color: "white",
       borderRadius: "4em",
@@ -58,10 +53,6 @@ const useStyles = makeStyles(() =>
     },
     formLabel: {
       marginBottom: "1em",
-    },
-    iconDifficulty: {
-      fontSize: "2em",
-      color: "#8A20ED",
     },
   })
 );
@@ -164,22 +155,6 @@ export const TriviaParameterChoice: React.FC<TriviaParameterChoiceProps> = ({
                 <MenuItem value="&difficulty=medium">Medium</MenuItem>
                 <MenuItem value="&difficulty=hard">Hard</MenuItem>
               </Field>
-              {values.difficulty === "&difficulty=easy" ? (
-                <FontAwesomeIcon
-                  icon={faUser}
-                  className={classes.iconDifficulty}
-                />
-              ) : values.difficulty === "&difficulty=medium" ? (
-                <FontAwesomeIcon
-                  icon={faUserGraduate}
-                  className={classes.iconDifficulty}
-                />
-              ) : values.difficulty === "&difficulty=hard" ? (
-                <FontAwesomeIcon
-                  icon={faUserAstronaut}
-                  className={classes.iconDifficulty}
-                />
-              ) : null}
             </div>
           </div>
           <div className={classes.formDiv}>

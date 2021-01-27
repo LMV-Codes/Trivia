@@ -9,6 +9,10 @@ const useStyles = makeStyles(() =>
     footerMain: {
       backgroundColor: "#8A20ED",
     },
+    gitHubLink: {
+      textDecoration: "none",
+      color: "white",
+    },
   })
 );
 
@@ -17,7 +21,11 @@ export const Footer: React.FC = ({}) => {
   return (
     <AppBar position="static" className={classes.footerMain}>
       <Toolbar>
-        <Typography variant="h6">Quizzer</Typography>
+        <Typography variant="body1" align="center">
+          <a className={classes.gitHubLink} href="https://github.com/LMV-Codes">
+            Made by LMV-Codes
+          </a>
+        </Typography>
       </Toolbar>
     </AppBar>
   );
