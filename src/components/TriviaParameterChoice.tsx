@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Formik, Form, Field } from "formik";
 import {
@@ -9,6 +9,7 @@ import {
   MenuItem,
   Select,
 } from "@material-ui/core";
+import { useSpring, animated } from "react-spring";
 
 interface TriviaParameterChoiceProps {
   setTriviaData: Function;
@@ -45,7 +46,7 @@ const useStyles = makeStyles(() =>
       marginTop: "1em",
       width: "15em",
       color: "white",
-      borderRadius: "4em",
+      borderRadius: "5px",
       backgroundColor: "#8A20ED",
       "&:hover": {
         backgroundColor: "#601BA1",
@@ -53,6 +54,18 @@ const useStyles = makeStyles(() =>
     },
     formLabel: {
       marginBottom: "1em",
+    },
+    animationTest: {
+      textAlign: "center",
+      color: "white",
+      borderRadius: "2em",
+      backgroundColor: "#8A20ED",
+      width: "4em",
+      height: "2em",
+      "&:hover": {
+        cursor: "pointer",
+        backgroundColor: "#601BA1",
+      },
     },
   })
 );
@@ -62,6 +75,19 @@ export const TriviaParameterChoice: React.FC<TriviaParameterChoiceProps> = ({
   setDataRecieved,
 }) => {
   const classes = useStyles();
+  const [animationRunning, setAnimationRunning] = useState(false);
+  const { animation } = useSpring({
+    from: { animation: 0 },
+    animation: animationRunning ? 1 : 0,
+    config: { duration: 500 },
+  });
+
+  const springProps = useSpring({
+    loop: true,
+    from: { rotateZ: 0 },
+    to: { rotateZ: 180 },
+  });
+
   const initialValues: PostForm = {
     numberOfQuestions: "amount=10",
     category: "",
@@ -172,9 +198,11 @@ export const TriviaParameterChoice: React.FC<TriviaParameterChoiceProps> = ({
               <MenuItem value="&type=boolean">True / False</MenuItem>
             </Field>
           </div>
+          <div onClick={() => setAnimationRunning(!animationRunning)}></div>
           <Button type="submit" className={classes.submitButton}>
             Generate Trivia
           </Button>
+          <animated.div style={springProps}>test</animated.div>
         </Form>
       )}
     </Formik>

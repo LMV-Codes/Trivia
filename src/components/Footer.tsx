@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 const useStyles = makeStyles(() =>
   createStyles({
     footerMain: {
-      backgroundColor: "#8A20ED",
+      backgroundColor: "#601BA1",
     },
     gitHubLink: {
       textDecoration: "none",

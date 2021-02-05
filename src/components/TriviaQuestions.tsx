@@ -29,7 +29,7 @@ const useStyles = makeStyles(() =>
       marginTop: "1em",
       width: "10em",
       color: "white",
-      borderRadius: "2.5em",
+      borderRadius: "5px",
       backgroundColor: "#8A20ED",
       "&:hover": {
         backgroundColor: "#601BA1",
@@ -44,25 +44,30 @@ const useStyles = makeStyles(() =>
         width: "0",
       },
       "& label": {
-        color: "white",
+        color: "#601BA1",
         display: "inline-block",
-        backgroundColor: "#8A20ED",
+        border: "0.1em solid #8A20ED",
+        backgroundColor: "#FFFFFF",
         padding: "10px 20px",
-        fontFamily: "sans-serif, Arial",
+        fontFamily: "Karla, sans-serif",
         fontSize: "16px",
-        borderRadius: "2em",
+        borderRadius: "5px",
+        transition: "all 0.3s",
       },
       "& input[type=radio]:checked + label": {
+        color: "white",
         backgroundColor: "#601BA1",
       },
 
       "& label:hover": {
+        color: "white",
         backgroundColor: "#601BA1",
         cursor: "pointer",
       },
     },
     questionTypography: {
-      fontSize: "1em",
+      fontFamily: "Rubik, sans-serif",
+      fontWeight: 400,
     },
   })
 );
@@ -73,16 +78,12 @@ export const TriviaQuestions: React.FC<TriviaQuestionsProps> = ({
   const classes = useStyles();
   const [corrected, setCorrected] = useState(false);
   const [correctOrWrong, setCorrectOrWrong] = useState<boolean[]>([]);
-  const combineAndRandomizeAnswers = (
+  const joinAndSort = (
     incorrectAnswers: Array<string>,
     correctAnswer: string
   ) => {
     let allAnswers: Array<string> = [...incorrectAnswers, correctAnswer];
-    for (let i = allAnswers.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [allAnswers[i], allAnswers[j]] = [allAnswers[j], allAnswers[i]];
-    }
-    return allAnswers;
+    return allAnswers.sort();
   };
 
   return (
@@ -111,10 +112,7 @@ export const TriviaQuestions: React.FC<TriviaQuestionsProps> = ({
       <Form className={classes.triviaForm}>
         {triviaData.map((data, indexQuestion) => (
           <div key={indexQuestion}>
-            <Typography
-              variant="overline"
-              className={classes.questionTypography}
-            >
+            <Typography variant="h6" className={classes.questionTypography}>
               {atob(data.question)}
             </Typography>
             <Grid
@@ -124,31 +122,30 @@ export const TriviaQuestions: React.FC<TriviaQuestionsProps> = ({
               alignItems="baseline"
               spacing={1}
             >
-              {combineAndRandomizeAnswers(
-                data.incorrect_answers,
-                data.correct_answer
-              ).map((answer, indexAnswer) => (
-                <div
-                  role="group"
-                  aria-labelledby="radioGroup"
-                  key={indexAnswer}
-                  className={classes.answersBlock}
-                >
-                  <Grid item xs>
-                    <Field
-                      disabled={corrected ? true : false}
-                      type="radio"
-                      value={answer}
-                      name={`questions.${indexQuestion}`}
-                      key={indexAnswer}
-                      id={`${answer}${indexQuestion}`}
-                    />
-                    <label htmlFor={`${answer}${indexQuestion}`}>
-                      {atob(answer)}
-                    </label>
-                  </Grid>
-                </div>
-              ))}
+              {joinAndSort(data.incorrect_answers, data.correct_answer).map(
+                (answer, indexAnswer) => (
+                  <div
+                    role="group"
+                    aria-labelledby="radioGroup"
+                    key={indexAnswer}
+                    className={classes.answersBlock}
+                  >
+                    <Grid item xs key={indexAnswer}>
+                      <Field
+                        disabled={corrected ? true : false}
+                        type="radio"
+                        value={answer}
+                        name={`questions.${indexQuestion}`}
+                        key={indexAnswer}
+                        id={`${answer}${indexQuestion}`}
+                      />
+                      <label htmlFor={`${answer}${indexQuestion}`}>
+                        {atob(answer)}
+                      </label>
+                    </Grid>
+                  </div>
+                )
+              )}
             </Grid>
 
             {!corrected

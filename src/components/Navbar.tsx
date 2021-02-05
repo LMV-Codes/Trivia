@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 const useStyles = makeStyles(() =>
   createStyles({
     navMain: {
-      backgroundColor: "#8A20ED",
+      backgroundColor: "#601BA1",
     },
   })
 );
