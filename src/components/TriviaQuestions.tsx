@@ -1,19 +1,23 @@
 import React, { useState } from "react";
-import { Formik, Form, Field, FieldProps } from "formik";
+import { Formik, Form } from "formik";
 import { TriviaData } from "../pages/Home";
 import {
   Button,
   createStyles,
   makeStyles,
-  Grid,
   Typography,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import "../index.css";
+import { useSpring, animated, useTrail } from "react-spring";
+import { Answers } from "./Answers";
+import { MainTrail } from "./MainTrail";
 
 interface TriviaQuestionsProps {
   triviaData: TriviaData[];
   setDataRecieved: Function;
+  setRequestSent: Function;
+  dataRecieved: boolean;
 }
 
 const useStyles = makeStyles(() =>
@@ -35,36 +39,6 @@ const useStyles = makeStyles(() =>
         backgroundColor: "#601BA1",
       },
     },
-    answersBlock: {
-      marginTop: "1.5em",
-      marginBottom: "1.5em",
-      "& input[type=radio]": {
-        opacity: "0",
-        position: "fixed",
-        width: "0",
-      },
-      "& label": {
-        color: "#601BA1",
-        display: "inline-block",
-        border: "0.1em solid #8A20ED",
-        backgroundColor: "#FFFFFF",
-        padding: "10px 20px",
-        fontFamily: "Karla, sans-serif",
-        fontSize: "16px",
-        borderRadius: "5px",
-        transition: "all 0.3s",
-      },
-      "& input[type=radio]:checked + label": {
-        color: "white",
-        backgroundColor: "#601BA1",
-      },
-
-      "& label:hover": {
-        color: "white",
-        backgroundColor: "#601BA1",
-        cursor: "pointer",
-      },
-    },
     questionTypography: {
       fontFamily: "Rubik, sans-serif",
       fontWeight: 400,
@@ -74,18 +48,28 @@ const useStyles = makeStyles(() =>
 export const TriviaQuestions: React.FC<TriviaQuestionsProps> = ({
   triviaData,
   setDataRecieved,
+  setRequestSent,
+  dataRecieved,
 }) => {
   const classes = useStyles();
   const [corrected, setCorrected] = useState(false);
   const [correctOrWrong, setCorrectOrWrong] = useState<boolean[]>([]);
-  const joinAndSort = (
-    incorrectAnswers: Array<string>,
-    correctAnswer: string
-  ) => {
-    let allAnswers: Array<string> = [...incorrectAnswers, correctAnswer];
-    return allAnswers.sort();
-  };
+  const mainSpringProp = useSpring({
+    from: { opacity: 0 },
+    to: { opacity: dataRecieved ? 1 : 0 },
+  });
 
+  const trail = useTrail(10, {
+    to: { translateX: dataRecieved ? 0 : -600 },
+    from: {
+      translateX: -600,
+    },
+  });
+
+  const springProps = useSpring({
+    from: { translateX: -200 },
+    to: { translateX: corrected ? 0 : -200 },
+  });
   return (
     <Formik
       initialValues={{
@@ -109,60 +93,43 @@ export const TriviaQuestions: React.FC<TriviaQuestionsProps> = ({
         setCorrected(true);
       }}
     >
+      {/* <animated.div style={mainSpringProp as any}> */}
       <Form className={classes.triviaForm}>
-        {triviaData.map((data, indexQuestion) => (
-          <div key={indexQuestion}>
-            <Typography variant="h6" className={classes.questionTypography}>
-              {atob(data.question)}
-            </Typography>
-            <Grid
-              container
-              direction="row"
-              justify="space-between"
-              alignItems="baseline"
-              spacing={1}
-            >
-              {joinAndSort(data.incorrect_answers, data.correct_answer).map(
-                (answer, indexAnswer) => (
-                  <div
-                    role="group"
-                    aria-labelledby="radioGroup"
-                    key={indexAnswer}
-                    className={classes.answersBlock}
-                  >
-                    <Grid item xs key={indexAnswer}>
-                      <Field
-                        disabled={corrected ? true : false}
-                        type="radio"
-                        value={answer}
-                        name={`questions.${indexQuestion}`}
-                        key={indexAnswer}
-                        id={`${answer}${indexQuestion}`}
-                      />
-                      <label htmlFor={`${answer}${indexQuestion}`}>
-                        {atob(answer)}
-                      </label>
-                    </Grid>
-                  </div>
-                )
-              )}
-            </Grid>
+        <MainTrail dataRecieved={dataRecieved}>
+          {triviaData.map((data, indexQuestion) => (
+            <div key={indexQuestion}>
+              <Typography variant="h6" className={classes.questionTypography}>
+                {atob(data.question)}
+              </Typography>
+              <Answers
+                data={data}
+                indexQuestion={indexQuestion}
+                corrected={corrected}
+              />
+              <div>
+                {corrected
+                  ? [
+                      correctOrWrong[indexQuestion] ? (
+                        <animated.div style={springProps}>
+                          <Alert severity="success">
+                            {atob(data.correct_answer)} is the correct answer!
+                          </Alert>
+                        </animated.div>
+                      ) : (
+                        <animated.div style={springProps}>
+                          <Alert severity="error">
+                            Wrong, the correct answer was{" "}
+                            {atob(data.correct_answer)}
+                          </Alert>
+                        </animated.div>
+                      ),
+                    ]
+                  : null}
+              </div>
+            </div>
+          ))}
+        </MainTrail>
 
-            {!corrected
-              ? null
-              : [
-                  correctOrWrong[indexQuestion] ? (
-                    <Alert severity="success">
-                      {atob(data.correct_answer)} is the correct answer!
-                    </Alert>
-                  ) : (
-                    <Alert severity="error">
-                      Wrong, the correct answer was {atob(data.correct_answer)}
-                    </Alert>
-                  ),
-                ]}
-          </div>
-        ))}
         {!corrected ? (
           <Button type="submit" className={classes.submitButton}>
             Submit
@@ -170,12 +137,16 @@ export const TriviaQuestions: React.FC<TriviaQuestionsProps> = ({
         ) : (
           <Button
             className={classes.submitButton}
-            onClick={() => setDataRecieved(false)}
+            onClick={() => {
+              setDataRecieved(false);
+              setRequestSent(false);
+            }}
           >
             Generate new trivia
           </Button>
         )}
       </Form>
+      {/* </animated.div> */}
     </Formik>
   );
 };

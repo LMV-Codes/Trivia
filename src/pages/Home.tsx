@@ -6,6 +6,7 @@ import {
   Button,
 } from "@material-ui/core";
 import React, { useState } from "react";
+import { useSpring, animated } from "react-spring";
 import { TriviaParameterChoice } from "../components/TriviaParameterChoice";
 import { TriviaQuestions } from "../components/TriviaQuestions";
 
@@ -45,34 +46,42 @@ export interface TriviaData {
 export const Home: React.FC = ({}) => {
   const classes = useStyles();
   const [dataRecieved, setDataRecieved] = useState<boolean>(false);
+  const [requestSent, setRequestSent] = useState(false);
   const [data, setData] = useState<TriviaData[]>([]);
+  const springProps = useSpring({
+    from: { opacity: 1 },
+    to: { opacity: requestSent ? 0 : 1 },
+  });
 
   return (
     <Container className={classes.mainContainer}>
-      {dataRecieved === false ? (
-        <div className={classes.form}>
-          <Typography
-            variant="overline"
-            align="center"
-            className={classes.title}
-          >
-            welcome to trivianator
-          </Typography>
-          <Typography variant="body2" align="center">
-            Generate a trivia and test your knowledge
-          </Typography>
-        </div>
-      ) : null}
-
-      {dataRecieved === false ? (
-        <div>
-          <TriviaParameterChoice
-            setTriviaData={setData}
-            setDataRecieved={setDataRecieved}
-          />
-        </div>
+      {dataRecieved ? (
+        <TriviaQuestions
+          triviaData={data}
+          setDataRecieved={setDataRecieved}
+          dataRecieved={dataRecieved}
+          setRequestSent={setRequestSent}
+        />
       ) : (
-        <TriviaQuestions triviaData={data} setDataRecieved={setDataRecieved} />
+        <animated.div style={springProps as any}>
+          <div className={classes.form}>
+            <Typography
+              variant="overline"
+              align="center"
+              className={classes.title}
+            >
+              welcome to trivianator
+            </Typography>
+            <Typography variant="body2" align="center">
+              Generate a trivia and test your knowledge
+            </Typography>
+            <TriviaParameterChoice
+              setTriviaData={setData}
+              setDataRecieved={setDataRecieved}
+              setRequestSent={setRequestSent}
+            />
+          </div>
+        </animated.div>
       )}
     </Container>
   );

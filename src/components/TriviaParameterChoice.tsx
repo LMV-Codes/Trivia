@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import axios from "axios";
 import { Formik, Form, Field } from "formik";
 import {
@@ -9,11 +9,11 @@ import {
   MenuItem,
   Select,
 } from "@material-ui/core";
-import { useSpring, animated } from "react-spring";
 
 interface TriviaParameterChoiceProps {
   setTriviaData: Function;
   setDataRecieved: Function;
+  setRequestSent: Function;
 }
 interface PostForm {
   numberOfQuestions: string;
@@ -73,20 +73,9 @@ const useStyles = makeStyles(() =>
 export const TriviaParameterChoice: React.FC<TriviaParameterChoiceProps> = ({
   setTriviaData,
   setDataRecieved,
+  setRequestSent,
 }) => {
   const classes = useStyles();
-  const [animationRunning, setAnimationRunning] = useState(false);
-  const { animation } = useSpring({
-    from: { animation: 0 },
-    animation: animationRunning ? 1 : 0,
-    config: { duration: 500 },
-  });
-
-  const springProps = useSpring({
-    loop: true,
-    from: { rotateZ: 0 },
-    to: { rotateZ: 180 },
-  });
 
   const initialValues: PostForm = {
     numberOfQuestions: "amount=10",
@@ -198,11 +187,13 @@ export const TriviaParameterChoice: React.FC<TriviaParameterChoiceProps> = ({
               <MenuItem value="&type=boolean">True / False</MenuItem>
             </Field>
           </div>
-          <div onClick={() => setAnimationRunning(!animationRunning)}></div>
-          <Button type="submit" className={classes.submitButton}>
+          <Button
+            type="submit"
+            className={classes.submitButton}
+            onClick={() => setRequestSent(true)}
+          >
             Generate Trivia
           </Button>
-          <animated.div style={springProps}>test</animated.div>
         </Form>
       )}
     </Formik>
