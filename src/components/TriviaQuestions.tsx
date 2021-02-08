@@ -54,21 +54,10 @@ export const TriviaQuestions: React.FC<TriviaQuestionsProps> = ({
   const classes = useStyles();
   const [corrected, setCorrected] = useState(false);
   const [correctOrWrong, setCorrectOrWrong] = useState<boolean[]>([]);
-  const mainSpringProp = useSpring({
-    from: { opacity: 0 },
-    to: { opacity: dataRecieved ? 1 : 0 },
-  });
-
-  const trail = useTrail(10, {
-    to: { translateX: dataRecieved ? 0 : -600 },
-    from: {
-      translateX: -600,
-    },
-  });
 
   const springProps = useSpring({
-    from: { translateX: -200 },
-    to: { translateX: corrected ? 0 : -200 },
+    from: { translateY: -50, opacity: 0 },
+    to: { translateY: corrected ? 0 : -50, opacity: corrected ? 1 : 0 },
   });
   return (
     <Formik
@@ -95,7 +84,7 @@ export const TriviaQuestions: React.FC<TriviaQuestionsProps> = ({
     >
       {/* <animated.div style={mainSpringProp as any}> */}
       <Form className={classes.triviaForm}>
-        <MainTrail dataRecieved={dataRecieved}>
+        <MainTrail animateOn={dataRecieved}>
           {triviaData.map((data, indexQuestion) => (
             <div key={indexQuestion}>
               <Typography variant="h6" className={classes.questionTypography}>
@@ -110,13 +99,13 @@ export const TriviaQuestions: React.FC<TriviaQuestionsProps> = ({
                 {corrected
                   ? [
                       correctOrWrong[indexQuestion] ? (
-                        <animated.div style={springProps}>
+                        <animated.div style={springProps as any}>
                           <Alert severity="success">
                             {atob(data.correct_answer)} is the correct answer!
                           </Alert>
                         </animated.div>
                       ) : (
-                        <animated.div style={springProps}>
+                        <animated.div style={springProps as any}>
                           <Alert severity="error">
                             Wrong, the correct answer was{" "}
                             {atob(data.correct_answer)}
@@ -146,7 +135,6 @@ export const TriviaQuestions: React.FC<TriviaQuestionsProps> = ({
           </Button>
         )}
       </Form>
-      {/* </animated.div> */}
     </Formik>
   );
 };

@@ -3,7 +3,6 @@ import {
   createStyles,
   makeStyles,
   Typography,
-  Button,
 } from "@material-ui/core";
 import React, { useState } from "react";
 import { useSpring, animated } from "react-spring";
@@ -49,8 +48,8 @@ export const Home: React.FC = ({}) => {
   const [requestSent, setRequestSent] = useState(false);
   const [data, setData] = useState<TriviaData[]>([]);
   const springProps = useSpring({
-    from: { opacity: 1 },
-    to: { opacity: requestSent ? 0 : 1 },
+    from: { opacity: 1, translateX: 0 },
+    to: { opacity: requestSent ? 0 : 1, translateX: requestSent ? -300 : 0 },
   });
 
   return (
@@ -70,10 +69,10 @@ export const Home: React.FC = ({}) => {
               align="center"
               className={classes.title}
             >
-              welcome to trivianator
+              welcome to trivia maker
             </Typography>
             <Typography variant="body2" align="center">
-              Generate a trivia and test your knowledge
+              Make a trivia and test your knowledge
             </Typography>
             <TriviaParameterChoice
               setTriviaData={setData}

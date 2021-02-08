@@ -1,18 +1,18 @@
 import React from "react";
 import { a, useTrail } from "react-spring";
 interface MainTrailProps {
-  dataRecieved: boolean;
+  animateOn: boolean;
 }
 
 export const MainTrail: React.FC<MainTrailProps> = ({
-  dataRecieved,
+  animateOn,
   children,
 }) => {
   const items = React.Children.toArray(children);
   const trail = useTrail(items.length, {
     to: {
-      opacity: dataRecieved ? 1 : 0,
-      translateX: dataRecieved ? 0 : -800,
+      opacity: animateOn ? 1 : 0,
+      translateX: animateOn ? 0 : -800,
     },
     from: {
       opacity: 0,

@@ -192,7 +192,7 @@ export const TriviaParameterChoice: React.FC<TriviaParameterChoiceProps> = ({
             className={classes.submitButton}
             onClick={() => setRequestSent(true)}
           >
-            Generate Trivia
+            Make Trivia
           </Button>
         </Form>
       )}

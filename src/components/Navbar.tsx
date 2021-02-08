@@ -17,7 +17,7 @@ export const Navbar: React.FC = ({}) => {
   return (
     <AppBar position="static" className={classes.navMain}>
       <Toolbar>
-        <Typography variant="h6">TV</Typography>
+        <Typography variant="h6">TVM</Typography>
       </Toolbar>
     </AppBar>
   );

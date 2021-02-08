@@ -7,6 +7,9 @@ import Typography from "@material-ui/core/Typography";
 const useStyles = makeStyles(() =>
   createStyles({
     footerMain: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
       backgroundColor: "#601BA1",
     },
     gitHubLink: {
@@ -25,6 +28,7 @@ export const Footer: React.FC = ({}) => {
           <a className={classes.gitHubLink} href="https://github.com/LMV-Codes">
             Made by LMV-Codes
           </a>
+          &#xA0;using Opentdb
         </Typography>
       </Toolbar>
     </AppBar>
