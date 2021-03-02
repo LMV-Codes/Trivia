@@ -93,7 +93,6 @@ export const TriviaParameterChoice: React.FC<TriviaParameterChoiceProps> = ({
               `https://opentdb.com/api.php?${values.numberOfQuestions}&category=${values.category}${values.difficulty}${values.type}&encode=base64`
             );
             setTriviaData(response.data.results);
-            console.log(response.data.results);
             setDataRecieved(true);
           } catch (error) {
             throw error;
