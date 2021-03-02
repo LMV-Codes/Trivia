@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import "../index.css";
-import { useSpring, animated, useTrail } from "react-spring";
+import { useSpring, animated } from "react-spring";
 import { Answers } from "./Answers";
 import { MainTrail } from "./MainTrail";
 
@@ -82,7 +82,6 @@ export const TriviaQuestions: React.FC<TriviaQuestionsProps> = ({
         setCorrected(true);
       }}
     >
-      {/* <animated.div style={mainSpringProp as any}> */}
       <Form className={classes.triviaForm}>
         <MainTrail animateOn={dataRecieved}>
           {triviaData.map((data, indexQuestion) => (
@@ -99,13 +98,19 @@ export const TriviaQuestions: React.FC<TriviaQuestionsProps> = ({
                 {corrected
                   ? [
                       correctOrWrong[indexQuestion] ? (
-                        <animated.div style={springProps as any}>
+                        <animated.div
+                          style={springProps as any}
+                          key={indexQuestion}
+                        >
                           <Alert severity="success">
                             {atob(data.correct_answer)} is the correct answer!
                           </Alert>
                         </animated.div>
                       ) : (
-                        <animated.div style={springProps as any}>
+                        <animated.div
+                          style={springProps as any}
+                          key={indexQuestion}
+                        >
                           <Alert severity="error">
                             Wrong, the correct answer was{" "}
                             {atob(data.correct_answer)}

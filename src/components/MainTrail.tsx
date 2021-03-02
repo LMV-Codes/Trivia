@@ -21,8 +21,8 @@ export const MainTrail: React.FC<MainTrailProps> = ({
   });
   return (
     <div>
-      {trail.map((props, index) => (
-        <a.div key={items[index] as any} style={props as any}>
+      {trail.map((props, index: number) => (
+        <a.div key={index} style={props as any}>
           {items[index]}
         </a.div>
       ))}
