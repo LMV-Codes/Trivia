@@ -7,9 +7,7 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
 import "../index.css";
-import { useSpring, animated } from "react-spring";
 import { Answers } from "./Answers";
 import { MainTrail } from "./MainTrail";
 import { QuestionAlert } from "./QuestionAlert";
@@ -56,10 +54,6 @@ export const TriviaQuestions: React.FC<TriviaQuestionsProps> = ({
   const [corrected, setCorrected] = useState(false);
   const [correctOrWrong, setCorrectOrWrong] = useState<boolean[]>([]);
 
-  const springProps = useSpring({
-    from: { translateY: -50, opacity: 0 },
-    to: { translateY: corrected ? 0 : -50, opacity: corrected ? 1 : 0 },
-  });
   return (
     <Formik
       initialValues={{
