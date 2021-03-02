@@ -42,7 +42,7 @@ export interface TriviaData {
   incorrect_answers: Array<string>;
 }
 
-export const Home: React.FC = ({}) => {
+export const Home: React.FC = () => {
   const classes = useStyles();
   const [dataRecieved, setDataRecieved] = useState<boolean>(false);
   const [requestSent, setRequestSent] = useState(false);
