@@ -19,7 +19,7 @@ const useStyles = makeStyles(() =>
   })
 );
 
-export const Footer: React.FC = ({}) => {
+export const Footer: React.FC = () => {
   const classes = useStyles();
   return (
     <AppBar position="static" className={classes.footerMain}>
