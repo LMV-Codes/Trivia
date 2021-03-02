@@ -88,15 +88,13 @@ export const TriviaQuestions: React.FC<TriviaQuestionsProps> = ({
                 corrected={corrected}
               />
               <div>
-                {corrected
-                  ? [
-                      <QuestionAlert
-                        corrected={corrected}
-                        correctAnswer={data.correct_answer}
-                        rightOrWrong={correctOrWrong[indexQuestion]}
-                      />,
-                    ]
-                  : null}
+                {corrected ? (
+                  <QuestionAlert
+                    corrected={corrected}
+                    correctAnswer={data.correct_answer}
+                    rightOrWrong={correctOrWrong[indexQuestion]}
+                  />
+                ) : null}
               </div>
             </div>
           ))}
