@@ -12,6 +12,7 @@ import "../index.css";
 import { useSpring, animated } from "react-spring";
 import { Answers } from "./Answers";
 import { MainTrail } from "./MainTrail";
+import { QuestionAlert } from "./QuestionAlert";
 
 interface TriviaQuestionsProps {
   triviaData: TriviaData[];
@@ -73,11 +74,9 @@ export const TriviaQuestions: React.FC<TriviaQuestionsProps> = ({
             } else {
               answersArray.push(false);
             }
-            setCorrectOrWrong(answersArray);
           }
         };
-        console.log(correctOrWrong);
-        console.log(values);
+        setCorrectOrWrong(answersArray);
         testAnswers(triviaData);
         setCorrected(true);
       }}
@@ -97,26 +96,11 @@ export const TriviaQuestions: React.FC<TriviaQuestionsProps> = ({
               <div>
                 {corrected
                   ? [
-                      correctOrWrong[indexQuestion] ? (
-                        <animated.div
-                          style={springProps as any}
-                          key={indexQuestion}
-                        >
-                          <Alert severity="success">
-                            {atob(data.correct_answer)} is the correct answer!
-                          </Alert>
-                        </animated.div>
-                      ) : (
-                        <animated.div
-                          style={springProps as any}
-                          key={indexQuestion}
-                        >
-                          <Alert severity="error">
-                            Wrong, the correct answer was{" "}
-                            {atob(data.correct_answer)}
-                          </Alert>
-                        </animated.div>
-                      ),
+                      <QuestionAlert
+                        corrected={corrected}
+                        correctAnswer={data.correct_answer}
+                        rightOrWrong={correctOrWrong[indexQuestion]}
+                      />,
                     ]
                   : null}
               </div>
